@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { faker } from '@faker-js/faker';
 
 const createRandomPost = function () {
@@ -58,12 +58,7 @@ const App = function () {
           {isFakeDark ? '☀️' : '🌙'}
         </button>
 
-        <Header
-          posts={searchedPosts}
-          onClearPosts={handleClearPosts}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-        />
+        <Header onClearPosts={handleClearPosts} />
         <Main posts={searchedPosts} onAddPost={handleAddPost} />
         <Archive onAddPost={handleAddPost} />
         <Footer />
@@ -72,22 +67,27 @@ const App = function () {
   );
 };
 
-const Header = function ({ posts, onClearPosts, searchQuery, setSearchQuery }) {
+const Header = function () {
+  // 3. Consume context value
+  const { onClearPosts } = useContext(PostSearchContext);
+
   return (
     <header>
       <h1>
         <span>⚛️</span>The Atomic Blog
       </h1>
       <div>
-        <Results posts={posts} />
-        <SearchPosts searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <Results />
+        <SearchPosts />
         <button onClick={onClearPosts}>Clear posts</button>
       </div>
     </header>
   );
 };
 
-const SearchPosts = function ({ searchQuery, setSearchQuery }) {
+const SearchPosts = function () {
+  const { searchQuery, setSearchQuery } = useContext(PostSearchContext);
+
   return (
     <input
       value={searchQuery}
@@ -97,9 +97,14 @@ const SearchPosts = function ({ searchQuery, setSearchQuery }) {
   );
 };
 
-const Results = ({ posts }) => <p>🚀 {posts.length} atomic posts found</p>;
+const Results = function () {
+  const { posts } = useContext(PostSearchContext);
+  return <p>🚀 {posts.length} atomic posts found</p>;
+};
 
-const Main = function ({ posts, onAddPost }) {
+const Main = function () {
+  const { posts, onAddPost } = useContext(PostSearchContext);
+
   return (
     <main>
       <FormAddPost onAddPost={onAddPost} />
@@ -108,7 +113,9 @@ const Main = function ({ posts, onAddPost }) {
   );
 };
 
-const Posts = ({ posts }) => {
+const Posts = () => {
+  const { posts } = useContext(PostSearchContext);
+
   return (
     <section>
       <List posts={posts} />
@@ -116,7 +123,9 @@ const Posts = ({ posts }) => {
   );
 };
 
-const FormAddPost = function ({ onAddPost }) {
+const FormAddPost = function () {
+  const { onAddPost } = useContext(PostSearchContext);
+
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
 
@@ -145,7 +154,9 @@ const FormAddPost = function ({ onAddPost }) {
   );
 };
 
-const List = function ({ posts }) {
+const List = function () {
+  const { posts } = useContext(PostSearchContext);
+
   return (
     <ul>
       {posts.map((post, i) => (
@@ -158,7 +169,7 @@ const List = function ({ posts }) {
   );
 };
 
-const Archive = function ({ onAddPost }) {
+const Archive = function () {
   // Here we don't need the setter function. We're only using state to store these posts because the callback function passed into useState (which generates the posts) is only called once, on the initial render. So we use this trick as an optimization technique, because if we just used a regular variable, these posts would be re-created on every render. We could also move the posts outside the components, but I wanted to show you this trick 😉
   const [posts] = useState(() =>
     // 💥 WARNING: This might make your computer slow! Try a smaller `length` first
@@ -166,6 +177,8 @@ const Archive = function ({ onAddPost }) {
   );
 
   const [showArchive, setShowArchive] = useState(false);
+
+  const { onAddPost } = useContext(PostSearchContext);
 
   return (
     <aside>
