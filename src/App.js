@@ -9,7 +9,7 @@ const createRandomPost = function () {
 };
 
 // 1. Create a context
-const PostSearchContext = createContext();
+const Context = createContext();
 
 const App = function () {
   const [posts, setPosts] = useState(() =>
@@ -41,7 +41,7 @@ const App = function () {
 
   return (
     // 2. Provide value to child components
-    <PostSearchContext.Provider
+    <Context.Provider
       value={{
         posts: searchedPosts,
         onAddPost: handleAddPost,
@@ -63,13 +63,13 @@ const App = function () {
         <Archive onAddPost={handleAddPost} />
         <Footer />
       </section>
-    </PostSearchContext.Provider>
+    </Context.Provider>
   );
 };
 
 const Header = function () {
   // 3. Consume context value
-  const { onClearPosts } = useContext(PostSearchContext);
+  const { onClearPosts } = useContext(Context);
 
   return (
     <header>
@@ -86,7 +86,7 @@ const Header = function () {
 };
 
 const SearchPosts = function () {
-  const { searchQuery, setSearchQuery } = useContext(PostSearchContext);
+  const { searchQuery, setSearchQuery } = useContext(Context);
 
   return (
     <input
@@ -98,12 +98,12 @@ const SearchPosts = function () {
 };
 
 const Results = function () {
-  const { posts } = useContext(PostSearchContext);
+  const { posts } = useContext(Context);
   return <p>🚀 {posts.length} atomic posts found</p>;
 };
 
 const Main = function () {
-  const { posts, onAddPost } = useContext(PostSearchContext);
+  const { posts, onAddPost } = useContext(Context);
 
   return (
     <main>
@@ -114,7 +114,7 @@ const Main = function () {
 };
 
 const Posts = () => {
-  const { posts } = useContext(PostSearchContext);
+  const { posts } = useContext(Context);
 
   return (
     <section>
@@ -124,7 +124,7 @@ const Posts = () => {
 };
 
 const FormAddPost = function () {
-  const { onAddPost } = useContext(PostSearchContext);
+  const { onAddPost } = useContext(Context);
 
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -155,7 +155,7 @@ const FormAddPost = function () {
 };
 
 const List = function () {
-  const { posts } = useContext(PostSearchContext);
+  const { posts } = useContext(Context);
 
   return (
     <ul>
@@ -178,7 +178,7 @@ const Archive = function () {
 
   const [showArchive, setShowArchive] = useState(false);
 
-  const { onAddPost } = useContext(PostSearchContext);
+  const { onAddPost } = useContext(Context);
 
   return (
     <aside>
