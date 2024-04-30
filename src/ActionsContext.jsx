@@ -50,7 +50,7 @@ const Provider = function ({ children }) {
 const useActions = function () {
   const context = useContext(ActionsContext);
   if (context === undefined)
-    throw new Error('ActionsContext was used outside of the ActionsProvider');
+    throw new Error('ActionsContext was used outside of the Provider');
   return context;
 };
 

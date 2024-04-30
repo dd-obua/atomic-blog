@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import createRandomPost from './randomPost';
-import { useActions, Provider } from './Context';
+import { useActions, Provider } from './ActionsContext';
 
 const App = function () {
   return (
