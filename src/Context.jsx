@@ -49,6 +49,8 @@ const Provider = function ({ children }) {
 // Major actions in this app is post and search
 const useActions = function () {
   const context = useContext(ActionsContext);
+  if (context === undefined)
+    throw new Error('ActionsContext was used outside of the ActionsProvider');
   return context;
 };
 
