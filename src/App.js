@@ -1,6 +1,6 @@
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import createRandomPost from './randomPost';
-import { Context, Provider } from './Context';
+import { useActions, Provider } from './Context';
 
 const App = function () {
   return (
@@ -18,7 +18,7 @@ const App = function () {
 };
 
 const ModeBtn = function () {
-  const { isFakeDark, setIsFakeDark } = useContext(Context);
+  const { isFakeDark, setIsFakeDark } = useActions();
 
   return (
     <button
@@ -32,7 +32,7 @@ const ModeBtn = function () {
 
 const Header = function () {
   // 3. Consume context value
-  const { onClearPosts } = useContext(Context);
+  const { onClearPosts } = useActions();
 
   return (
     <header>
@@ -49,7 +49,7 @@ const Header = function () {
 };
 
 const SearchPosts = function () {
-  const { searchQuery, setSearchQuery } = useContext(Context);
+  const { searchQuery, setSearchQuery } = useActions();
 
   return (
     <input
@@ -61,7 +61,7 @@ const SearchPosts = function () {
 };
 
 const Results = function () {
-  const { posts } = useContext(Context);
+  const { posts } = useActions();
   return <p>🚀 {posts.length} atomic posts found</p>;
 };
 
@@ -83,7 +83,7 @@ const Posts = () => {
 };
 
 const FormAddPost = function () {
-  const { onAddPost } = useContext(Context);
+  const { onAddPost } = useActions();
 
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -114,7 +114,7 @@ const FormAddPost = function () {
 };
 
 const List = function () {
-  const { posts } = useContext(Context);
+  const { posts } = useActions();
 
   return (
     <ul>
@@ -129,7 +129,7 @@ const List = function () {
 };
 
 const Archive = function () {
-  const { onAddPost } = useContext(Context);
+  const { onAddPost } = useActions();
 
   // Here we don't need the setter function. We're only using state to store these posts because the callback function passed into useState (which generates the posts) is only called once, on the initial render. So we use this trick as an optimization technique, because if we just used a regular variable, these posts would be re-created on every render. We could also move the posts outside the components, but I wanted to show you this trick 😉
   const [posts] = useState(() =>

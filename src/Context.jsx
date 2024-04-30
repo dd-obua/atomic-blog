@@ -1,8 +1,8 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 import createRandomPost from './randomPost';
 
 // 1. Create a context
-const Context = createContext();
+const ActionsContext = createContext();
 
 const Provider = function ({ children }) {
   const [posts, setPosts] = useState(() =>
@@ -30,7 +30,7 @@ const Provider = function ({ children }) {
   );
 
   return (
-    <Context.Provider
+    <ActionsContext.Provider
       value={{
         posts: searchedPosts,
         onAddPost: handleAddPost,
@@ -42,8 +42,14 @@ const Provider = function ({ children }) {
       }}
     >
       {children}
-    </Context.Provider>
+    </ActionsContext.Provider>
   );
 };
 
-export { Context, Provider };
+// Major actions in this app is post and search
+const useActions = function () {
+  const context = useContext(ActionsContext);
+  return context;
+};
+
+export { Provider, useActions };
