@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 const SlowComponent = function () {
   // If this is too slow on your maching, reduce the `length`
-  const words = Array.from({ length: 100_000 }, () => 'WORD');
+  const words = Array.from({ length: 100_000 }, () => "WORD");
   return (
     <ul>
       {words.map((word, i) => (
@@ -14,14 +14,25 @@ const SlowComponent = function () {
   );
 };
 
-const Test = function () {
+const Counter = function ({ children }) {
   const [count, setCount] = useState(0);
-  
+
   return (
     <div>
       <h1>Slow counter?!?</h1>
       <button onClick={() => setCount((c) => c + 1)}>Increase: {count}</button>
-      <SlowComponent />
+      {children}
+    </div>
+  );
+};
+
+const Test = function () {
+  return (
+    <div>
+      <h1>Slow counter?!?</h1>
+      <Counter> 
+        <SlowComponent />;
+      </Counter>
     </div>
   );
 };

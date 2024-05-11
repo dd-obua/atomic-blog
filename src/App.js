@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import createRandomPost from './randomPost';
-import { useActions, Provider } from './ActionsContext';
+import { useState } from "react";
+import createRandomPost from "./randomPost";
+import { useActions, Provider } from "./ActionsContext";
+import Test from "./Test";
 
 const App = function () {
   return (
@@ -25,7 +26,7 @@ const ModeBtn = function () {
       onClick={() => setIsFakeDark((isFakeDark) => !isFakeDark)}
       className="btn-fake-dark-mode"
     >
-      {isFakeDark ? '☀️' : '🌙'}
+      {isFakeDark ? "☀️" : "🌙"}
     </button>
   );
 };
@@ -85,15 +86,15 @@ const Posts = () => {
 const FormAddPost = function () {
   const { onAddPost } = useActions();
 
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
 
   const handleSubmit = function (e) {
     e.preventDefault();
     if (!body || !title) return;
     onAddPost({ title, body });
-    setTitle('');
-    setBody('');
+    setTitle("");
+    setBody("");
   };
 
   return (
@@ -117,14 +118,17 @@ const List = function () {
   const { posts } = useActions();
 
   return (
-    <ul>
-      {posts.map((post, i) => (
-        <li key={i}>
-          <h3>{post.title}</h3>
-          <p>{post.body}</p>
-        </li>
-      ))}
-    </ul>
+    <>
+      <ul>
+        {posts.map((post, i) => (
+          <li key={i}>
+            <h3>{post.title}</h3>
+            <p>{post.body}</p>
+          </li>
+        ))}
+      </ul>
+      <Test />
+    </>
   );
 };
 
@@ -143,7 +147,7 @@ const Archive = function () {
     <aside>
       <h2>Post archive</h2>
       <button onClick={() => setShowArchive((s) => !s)}>
-        {`${showArchive ? 'Hide' : 'Show'} archive posts`}
+        {`${showArchive ? "Hide" : "Show"} archive posts`}
       </button>
 
       {showArchive && (
