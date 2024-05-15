@@ -1,5 +1,5 @@
-import { createContext, useState, useEffect, useContext } from 'react';
-import createRandomPost from './randomPost';
+import { createContext, useState, useEffect, useContext, useMemo } from "react";
+import createRandomPost from "./randomPost";
 
 // 1. Create a context
 const ActionsContext = createContext();
@@ -8,14 +8,16 @@ const Provider = function ({ children }) {
   const [posts, setPosts] = useState(() =>
     Array.from({ length: 30 }, () => createRandomPost())
   );
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [isFakeDark, setIsFakeDark] = useState(false);
 
   // Derived state. These are the posts that will actually be displayed
   const searchedPosts =
     searchQuery.length > 0
       ? posts.filter((post) =>
-          `${post.title} ${post.body}`.toLowerCase().includes(searchQuery.toLowerCase())
+          `${post.title} ${post.body}`
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
         )
       : posts;
 
@@ -24,14 +26,14 @@ const Provider = function ({ children }) {
 
   useEffect(
     function () {
-      document.documentElement.classList.toggle('fake-dark-mode');
+      document.documentElement.classList.toggle("fake-dark-mode");
     },
     [isFakeDark]
   );
 
-  return (
-    <ActionsContext.Provider
-      value={{
+  const value = useMemo(
+    function () {
+      return {
         posts: searchedPosts,
         onAddPost: handleAddPost,
         onClearPosts: handleClearPosts,
@@ -39,10 +41,13 @@ const Provider = function ({ children }) {
         setSearchQuery,
         isFakeDark,
         setIsFakeDark,
-      }}
-    >
-      {children}
-    </ActionsContext.Provider>
+      };
+    },
+    [isFakeDark, searchQuery, searchedPosts]
+  );
+
+  return (
+    <ActionsContext.Provider value={value}>{children}</ActionsContext.Provider>
   );
 };
 
@@ -50,7 +55,7 @@ const Provider = function ({ children }) {
 const useActions = function () {
   const context = useContext(ActionsContext);
   if (context === undefined)
-    throw new Error('ActionsContext was used outside of the Provider');
+    throw new Error("ActionsContext was used outside of the Provider");
   return context;
 };
 
